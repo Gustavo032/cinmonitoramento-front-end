@@ -1,166 +1,33 @@
 import { Box, Button, Flex, FormLabel, Image, Input, Link, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+
+//adicionei a função get e transformei o botão observação em texto e adicionei o arquivo api.js
+
+//imports back-end
+import api from '../../api.js'
 import { useEffect, useState } from "react";
 
+//back-end
 export function Tabela(){
-	const [ data, setData ] = useState<any>({
-		itapevi:[{
-			data: "05/03/2024",
-			smp: 12345678,
-			veiculo: "ABC1234/DEF5678",
-			motorista: "JOHN DOE DOE",
-			telefone: "11 91234-1234",
-			f: true,
-			ag: false,
-			au: false,
-			entrega: "FRACIONADA",
-			tecn: "FIXO",
-			valor: "123.456,78",
-			isca: "000000000",
-			data_inicio: "05/05/2024 06:00",
-			data_final: "22/05/2024",
-			destino: "MTZ x IPOJUCA",
-			status: "50%",
-			em_rota: true,
-			observacoes: ""
-		},{
-			data: "05/03/2024",
-			smp: 12345678,
-			veiculo: "ABC1234/DEF5678",
-			motorista: "JOHN DOE DOE",
-			telefone: "11 91234-1234",
-			f: true,
-			ag: false,
-			au: false,
-			entrega: "FRACIONADA",
-			tecn: "FIXO",
-			valor: "123.456,78",
-			isca: "000000000",
-			data_inicio: "05/05/2024 06:00",
-			data_final: "22/05/2024",
-			destino: "MTZ x IPOJUCA",
-			status: "50%",
-			em_rota: true,
-			observacoes: ""
-		},{
-			data: "05/03/2024",
-			smp: 12345678,
-			veiculo: "ABC1234/DEF5678",
-			motorista: "JOHN DOE DOE",
-			telefone: "11 91234-1234",
-			f: true,
-			ag: false,
-			au: false,
-			entrega: "FRACIONADA",
-			tecn: "FIXO",
-			valor: "123.456,78",
-			isca: "000000000",
-			data_inicio: "05/05/2024 06:00",
-			data_final: "22/05/2024",
-			destino: "MTZ x IPOJUCA",
-			status: "50%",
-			em_rota: true,
-			observacoes: ""
-		},{
-			data: "05/03/2024",
-			smp: 12345678,
-			veiculo: "ABC1234/DEF5678",
-			motorista: "JOHN DOE DOE",
-			telefone: "11 91234-1234",
-			f: true,
-			ag: false,
-			au: false,
-			entrega: "FRACIONADA",
-			tecn: "FIXO",
-			valor: "123.456,78",
-			isca: "000000000",
-			data_inicio: "05/05/2024 06:00",
-			data_final: "22/05/2024",
-			destino: "MTZ x IPOJUCA",
-			status: "50%",
-			em_rota: true,
-			observacoes: ""
-		},{
-			data: "05/03/2024",
-			smp: 12345678,
-			veiculo: "ABC1234/DEF5678",
-			motorista: "JOHN DOE DOE",
-			telefone: "11 91234-1234",
-			f: true,
-			ag: false,
-			au: false,
-			entrega: "FRACIONADA",
-			tecn: "FIXO",
-			valor: "123.456,78",
-			isca: "000000000",
-			data_inicio: "05/05/2024 06:00",
-			data_final: "22/05/2024",
-			destino: "MTZ x IPOJUCA",
-			status: "50%",
-			em_rota: true,
-			observacoes: ""
-		},{
-			data: "05/03/2024",
-			smp: 12345678,
-			veiculo: "ABC1234/DEF5678",
-			motorista: "JOHN DOE DOE",
-			telefone: "11 91234-1234",
-			f: true,
-			ag: false,
-			au: false,
-			entrega: "FRACIONADA",
-			tecn: "FIXO",
-			valor: "123.456,78",
-			isca: "000000000",
-			data_inicio: "05/05/2024 06:00",
-			data_final: "22/05/2024",
-			destino: "MTZ x IPOJUCA",
-			status: "50%",
-			em_rota: true,
-			observacoes: ""
-		},{
-			data: "05/03/2024",
-			smp: 12345678,
-			veiculo: "ABC1234/DEF5678",
-			motorista: "JOHN DOE DOE",
-			telefone: "11 91234-1234",
-			f: true,
-			ag: false,
-			au: false,
-			entrega: "FRACIONADA",
-			tecn: "FIXO",
-			valor: "123.456,78",
-			isca: "000000000",
-			data_inicio: "05/05/2024 06:00",
-			data_final: "22/05/2024",
-			destino: "MTZ x IPOJUCA",
-			status: "50%",
-			em_rota: true,
-			observacoes: ""
-		},{
-			data: "05/03/2024",
-			smp: 12345678,
-			veiculo: "ABC1234/DEF5678",
-			motorista: "JOHN DOE DOE",
-			telefone: "11 91234-1234",
-			f: true,
-			ag: false,
-			au: false,
-			entrega: "FRACIONADA",
-			tecn: "FIXO",
-			valor: "123.456,78",
-			isca: "000000000",
-			data_inicio: "05/05/2024 06:00",
-			data_final: "22/05/2024",
-			destino: "MTZ x IPOJUCA",
-			status: "50%",
-			em_rota: true,
-			observacoes: ""
-		}]
-	})
+
+	const [data, setdata] = useState([])
 
 	useEffect(() => {
-    (document.body.style as any).zoom = "80%"; // Definindo o zoom como 80%
-}, []);
+		//front zoom
+		(document.body.style as any).zoom = "80%";
+		const fetchdata = async () => {
+
+			try{
+			const response = await api.get('/select')
+			setdata(response.data)
+			console.log(data)
+			}
+			catch(error){
+				console.error(error)
+			}
+
+		}
+		fetchdata()
+	})
 
   return (
     <Box p="4" bgColor="gray.900" minH="100vh">
@@ -207,31 +74,30 @@ export function Tabela(){
                   <Th maxW="1rem">Obs</Th>
                 </Tr>
               </Thead>
+			  {/* back-end */}
               <Tbody borderColor="gray.900">
-                {data.itapevi.map((request:any, index:number) => (
+                {data.map((request:any, index:number) => (
                   <Tr _before={{
                     borderColor: '#000'
                   }}
-                    key={index}>
+                    key={request.id_viagem}>
                     <Td w="100%">{request.data}</Td>
                     <Td w="100%">{request.smp}</Td>
                     <Td w="100%">{request.veiculo}</Td>
                     <Td w="100%">{request.motorista}</Td>
                     <Td w="100%">{request.telefone}</Td>
-                    <Td w="100%">{request.f === true ? 'x' : ''}</Td>
-                    <Td w="100%">{request.au === true ? 'x' : ''}</Td>
-                    <Td w="100%">{request.ag === true ? 'x' : ''}</Td>
+                    <Td w="100%">{request.f}</Td>
+                    <Td w="100%">{request.ag}</Td>
+                    <Td w="100%">{request.au}</Td>
                     <Td w="100%">{request.entrega}</Td>
                     <Td w="100%">{request.tecn}</Td>
                     <Td w="100%">{request.valor}</Td>
                     <Td w="100%">{request.isca}</Td>
-                    <Td w="100%">{request.data_inicio}</Td>
-                    <Td w="100%">{request.data_final}</Td>
+                    <Td w="100%">{request.datainicio}</Td>
+                    <Td w="100%">{request.datafinal}</Td>
                     <Td w="100%">{request.destino}</Td>
                     <Td w="100%">{request.status}</Td>
-                    <Td w="100%" overflowX="auto">
-											{request.observacoes === '' ? (<Button>Mais</Button>) : request.observacoes }
-										</Td>
+                    <Td w="100%" overflowX="auto">{request.obs}</Td>
                   </Tr>
                 ))}
               </Tbody>
