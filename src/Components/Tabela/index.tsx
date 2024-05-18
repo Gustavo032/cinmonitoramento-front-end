@@ -6,34 +6,64 @@ import { Box, Button, Flex, FormLabel, Image, Input, Link, Table, Tbody, Td, Tex
 import api from '../../api.js'
 import { useEffect, useState } from "react";
 
+
 //back-end
 export function Tabela(){
 
 	const [data, setdata] = useState([])
 
+  const [variavelclick, setclick] = useState()
+
+  //variavél que recarrega o use efect
+  const [contador, setcontador] = useState(0)
+
+// função que captura o click do mouse que captura uma linha e seu id
+  const onClick = (id:any) => {
+    setclick(id)
+    console.log('o id esta aqui: ', id)
+    
+    return{
+      data: {id}
+    } 
+  }
+
+  // Seleciona os dados do banco enquanto renderiza aplicação
 	useEffect(() => {
 		//front zoom
 		(document.body.style as any).zoom = "80%";
 		const fetchdata = async () => {
 
 			try{
-			const response = await api.get('/select')
+			const response = await api.get('select')
+      console.log(response)
 			setdata(response.data)
-			console.log(data)
+      setcontador(0)
 			}
 			catch(error){
 				console.error(error)
 			}
-
 		}
 		fetchdata()
-	})
+	}, [contador])
+
+// pega os dados do click e exclui a linha desejada
+  async function delet(){
+    
+    try{
+      const config = onClick(variavelclick)
+      const response = await api.delete('delet',config)
+      console.log(response.data)
+      setcontador(+1)
+    } catch(error){
+      console.log(error)
+    }
+  }
 
   return (
     <Box p="4" bgColor="gray.900" minH="100vh">
         <>
           <Flex mb="4" alignItems="center" justifyContent={"space-between"}>
-            <Button as={Link} href="/" border="solid gray 0.16rem" mr="2" h="3rem" w="4rem" bgColor="gray.100">&#8592;</Button>
+            <Button onClick={delet} border="solid gray 0.16rem" mr="2" h="3rem" w="4rem" bgColor="gray.100">&#8592;</Button>
 
             <Flex justify="center" bgColor="gray.100" w="20%" border="solid gray 0.05rem" p="0.06rem 0" borderRadius="9999999px">
               <Image src="/logo192.png" h="3rem" />
@@ -77,11 +107,8 @@ export function Tabela(){
 			  {/* back-end */}
               <Tbody borderColor="gray.900">
                 {data.map((request:any, index:number) => (
-                  <Tr _before={{
-                    borderColor: '#000'
-                  }}
-                    key={request.id_viagem}>
-                    <Td w="100%">{request.data}</Td>
+                  <Tr onClick={() => onClick(request.id_viagem)} key={request.id_viagem} _before={{borderColor: variavelclick === request.id_viagem ? "black" : "green"}}>
+                    <Td w ='100%'></Td>
                     <Td w="100%">{request.smp}</Td>
                     <Td w="100%">{request.veiculo}</Td>
                     <Td w="100%">{request.motorista}</Td>
@@ -100,6 +127,7 @@ export function Tabela(){
                     <Td w="100%" overflowX="auto">{request.obs}</Td>
                   </Tr>
                 ))}
+                
               </Tbody>
             </Table>
           </Box>
