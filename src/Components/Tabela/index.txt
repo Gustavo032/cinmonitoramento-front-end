@@ -1,0 +1,216 @@
+import { Box, Button, Flex, FormLabel, Image, Input, Link, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+
+//adicionei a função get e transformei o botão observação em texto e adicionei o arquivo api.js
+
+//imports back-end
+import api from '../../api.js'
+import { useEffect, useState } from "react";
+
+
+//back-end
+export function Tabela(){
+
+	const [data, setdata] = useState([])
+
+  const [variavelclick, setclick] = useState()
+
+  const [selectedRowId, setSelectedRowId] = useState(null);
+
+  const [smp, setsmp] = useState('');
+
+  const [veiculo, setveiculo] = useState('')
+
+  const [motorista, setmotorista] = useState('')
+
+  const [telefone, settelefone] = useState('')
+
+  const [f, setf] = useState('')
+
+  const [ag, setag] = useState('')
+
+  const [au, setau] = useState('')
+
+  const [entrega, setentrega] = useState('')
+
+  const [tecn, settecn] = useState('')
+
+  const [valor, setvalor] = useState('')
+
+  const[isca, setisca] = useState('')
+
+  const [datainicio, setdatainicio] = useState('')
+
+  const [datafinal, setdatafinal] = useState('')
+
+  const [destino, setdestino] = useState('')
+
+  const [status, setstatus] = useState('')
+
+  const [obs, setobs] = useState('')
+
+  //variavél que recarrega o use efect
+  const [contador, setcontador] = useState(0)
+
+// função que captura o click do mouse que captura uma linha e seu id
+  const onClick = (id:any) => {
+     setSelectedRowId(id);
+    setsmp(id.smp);
+    setveiculo(id.veiculo)
+    setmotorista(id.motorista)
+    settelefone(id.telefone)
+    setf(id.f)
+    setag(id.ag)
+    setau(id.au)
+    setentrega(id.entrega)
+    settecn(id.tecn)
+    setvalor(id.valor)
+    setisca(id.isca)
+    setdatainicio(id.datainicio)
+    setdatafinal(id.datafinal)
+    setdestino(id.destino)
+    setstatus(id.status)
+    setobs(id.obs) 
+    console.log('o id esta aqui: ', id)
+    
+    return{
+      data: {id}
+    } 
+  }
+
+  // Seleciona os dados do banco enquanto renderiza aplicação
+	useEffect(() => {
+		//front zoom
+		(document.body.style as any).zoom = "80%";
+		const fetchdata = async () => {
+
+			try{
+			const response = await api.get('select')
+      console.log(response)
+			setdata(response.data)
+      setcontador(0)
+			}
+			catch(error){
+				console.error(error)
+			}
+		}
+		fetchdata()
+	}, [contador])
+
+ async function alterar(event: any) {
+    try{
+      const config2 = {
+        id,
+        smp,
+        veiculo,
+        motorista,
+        telefone,
+        f,
+        ag,
+        au,
+        entrega,
+        tecn,
+        valor,
+        isca,
+        datainicio,
+        datafinal,
+        destino,
+        status,
+        obs
+      }
+      const response = await api.put('alterar', config2)
+      setcontador(+1)
+    } catch (error){
+      console.log(error)
+    }
+  }
+
+
+// pega os dados do click e exclui a linha desejada
+  async function delet(){
+    
+    try{
+      const config = onClick(variavelclick)
+      const response = await api.delete('delet',config)
+      console.log(response.data)
+      setcontador(+1)
+    } catch(error){
+      console.log(error)
+    }
+  }
+
+  return (
+    <Box p="4" bgColor="gray.900" minH="100vh">
+        <>
+          <Flex mb="4" alignItems="center" justifyContent={"space-between"}>
+            <Button onClick={delet} border="solid gray 0.16rem" mr="2" h="3rem" w="4rem" bgColor="gray.100">&#8592;</Button>
+
+            <Flex justify="center" bgColor="gray.100" w="20%" border="solid gray 0.05rem" p="0.06rem 0" borderRadius="9999999px">
+              <Image src="/logo192.png" h="3rem" />
+            </Flex>
+            <Flex w="50%" align="center" >
+              <Flex width="100%" h="100%" alignItems="center" ml="2" border="solid gray 0.16rem" bgColor="gray.200" p="0.2rem" borderRadius={"0.25rem"} justify={"center"}>
+                <Text as={FormLabel} mt="0.5rem" htmlFor="inputDateStart" mr="2">Data Inicial:</Text>
+                <Box as={Input} type="date" id="inputDateStart" bgColor="gray.100" width="100%" border="solid 0.12rem black" borderRadius={"0.25rem"} height="2.5rem" textAlign="center" onChange={()=>console.log("test")} />
+              </Flex>
+              
+              <Flex width="100%" h="100%" alignItems="center" ml="2" border="solid gray 0.16rem" bgColor="gray.200" p="0.2rem" borderRadius={"0.25rem"} justify={"center"}>
+                <Text as={FormLabel} mt="0.5rem" htmlFor="inputDateEnd" ml="2" mr="2">Data Final:</Text>
+                <Box as={Input} type="date" id="inputDateEnd" bgColor="gray.100" width="100%" border="solid 0.12rem black" borderRadius={"0.25rem"} height="2.5rem" textAlign="center" onChange={()=>console.log("test")} />
+              </Flex>
+            </Flex>
+          </Flex>
+          
+          <Box p="4" bg="gray.300" borderRadius="md"  borderColor="gray.900" border="solid gray 0.16rem">
+            <Table variant="simple"  borderColor="gray.900">
+              <Thead  borderColor="gray.900">
+                <Tr borderColor="gray.900">
+                  <Th maxW="1rem">Data</Th>
+                  <Th maxW="1rem">Smp</Th>
+                  <Th maxW="1rem">Veiculo</Th>
+                  <Th maxW="1rem">Motorista</Th>
+                  <Th maxW="1rem">Telefone</Th>
+                  <Th maxW="1rem">F</Th>
+                  <Th maxW="1rem">Ag</Th>
+                  <Th maxW="1rem">Au</Th>
+                  <Th maxW="1rem">Entrega</Th>
+                  <Th maxW="1rem">Tecn</Th>
+                  <Th maxW="1rem">Valor</Th>
+                  <Th maxW="1rem">Isca</Th>
+                  <Th maxW="1rem">Data Inicio</Th>
+                  <Th maxW="1rem">Data Final</Th>
+                  <Th maxW="1rem">Destino</Th>
+                  <Th maxW="1rem">Status</Th>
+                  <Th maxW="1rem">Obs</Th>
+                </Tr>
+              </Thead>
+			  {/* back-end */}
+              <Tbody borderColor="gray.900">
+                {data.map((request:any, index:number) => (
+                  <Tr onClick={() => onClick(request.id_viagem)} key={request.id_viagem} _before={{borderColor: variavelclick === request.id_viagem ? "black" : "green"}}>
+                    <Td w ='100%'></Td>
+                    <Td w="100%"><input value={selectedRowId === request.id_viagem ? smp : request.smp} onChange={(e) => setsmp(e.target.value)}/></Td>
+                    <Td w="100%">{request.veiculo}</Td>
+                    <Td w="100%">{request.motorista}</Td>
+                    <Td w="100%">{request.telefone}</Td>
+                    <Td w="100%">{request.f}</Td>
+                    <Td w="100%">{request.ag}</Td>
+                    <Td w="100%">{request.au}</Td>
+                    <Td w="100%">{request.entrega}</Td>
+                    <Td w="100%">{request.tecn}</Td>
+                    <Td w="100%">{request.valor}</Td>
+                    <Td w="100%">{request.isca}</Td>
+                    <Td w="100%">{request.datainicio}</Td>
+                    <Td w="100%">{request.datafinal}</Td>
+                    <Td w="100%">{request.destino}</Td>
+                    <Td w="100%">{request.status}</Td>
+                    <Td w="100%" overflowX="auto">{request.obs}</Td>
+                  </Tr>
+                ))}
+                
+              </Tbody>
+            </Table>
+          </Box>
+        </>
+    </Box>
+  );
+};
