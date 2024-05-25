@@ -13,6 +13,8 @@ export function Tabela() {
     motorista: '',
     telefone: '',
     f: '',
+    ag: '',
+    au: '',
     entrega: '',
     tecn: '',
     valor: '',
@@ -41,6 +43,23 @@ export function Tabela() {
       console.log(response.data);
       onClose(); // Fecha o modal após o envio bem-sucedido
       fetchData();
+			setFormData({
+				smp: '',
+				veiculo: '',
+				motorista: '',
+				telefone: '',
+				f: false,
+				entrega: '',
+				tecn: '',
+				valor: '',
+				isca: '',
+				datainicio: '',
+				datafinal: '',
+				destino: '',
+				status: '',
+				obs: '',
+			});
+	
 		// Limpar o formulário ou qualquer outra ação necessária após o envio bem-sucedido
     } catch (error) {
       console.error(error);
@@ -132,15 +151,23 @@ export function Tabela() {
           </Flex>
         </Flex>
 
-        <Flex mb="4" alignItems="center">
-          <Input placeholder="SMP" name="smp" value={filters.smp} onChange={handleFilterChange} />
-          <Input placeholder="Veículo" name="veiculo" value={filters.veiculo} onChange={handleFilterChange} />
-          <Input placeholder="Motorista" name="motorista" value={filters.motorista} onChange={handleFilterChange} />
-          <Input placeholder="Telefone" name="telefone" value={filters.telefone} onChange={handleFilterChange} />
-				<Flex>
-					<Button onClick={onOpen} colorScheme="blue">Adicionar Viagem</Button>
-          <Button onClick={fetchFilteredData} colorScheme="blue" ml="2">Filtrar</Button>
-				</Flex>
+        <Flex mb="4" flexDirection={"column"}>
+					<Flex mb="4" alignItems="center">
+            <Input color="white" bgColor="gray.800" placeholder="SMP" name="smp" value={filters.smp} onChange={handleFilterChange} />
+            <Input color="white" bgColor="gray.800" placeholder="Veículo" name="veiculo" value={filters.veiculo} onChange={handleFilterChange} />
+            <Input color="white" bgColor="gray.800" placeholder="Motorista" name="motorista" value={filters.motorista} onChange={handleFilterChange} />
+            <Input color="white" bgColor="gray.800" placeholder="Telefone" name="telefone" value={filters.telefone} onChange={handleFilterChange} />
+					</Flex>
+					<Flex mb="4" alignItems="center">
+            <Input color="white" bgColor="gray.800" placeholder="Entrega" name="entrega" value={filters.entrega} onChange={handleFilterChange} />
+            <Input color="white" bgColor="gray.800" placeholder="Destino" name="destino" value={filters.destino} onChange={handleFilterChange} />
+            <Input color="white" bgColor="gray.800" placeholder="Status" name="status" value={filters.status} onChange={handleFilterChange} />
+            <Input color="white" bgColor="gray.800" placeholder="Obs" name="obs" value={filters.obs} onChange={handleFilterChange} />
+					</Flex>
+			  	<Flex w="100%" justifyContent={"space-between"}>
+				   	<Button onClick={onOpen} colorScheme="green">Adicionar Viagem</Button>
+            <Button onClick={fetchFilteredData} colorScheme="blue" ml="2">Filtrar</Button>
+			  	</Flex>
         </Flex>
 
         {noRecords ? ( // Renderiza a mensagem se não houver registros
