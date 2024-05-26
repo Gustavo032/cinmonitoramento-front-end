@@ -63,6 +63,24 @@ export function Tabela() {
         console.log(response.data);
         onClose(); // Fecha o modal após o envio bem-sucedido
         fetchData();
+				setFormData({
+					smp: '',
+					veiculo: '',
+					motorista: '',
+					telefone: '',
+					f: false,
+					ag: false,
+					au: false,
+					entrega: '',
+					tecn: '',
+					valor: '',
+					isca: '',
+					datainicio: '',
+					datafinal: '',
+					destino: '',
+					status: '',
+					obs: '',
+				});
     } catch (error) {
         console.error(error);
     }
