@@ -38,35 +38,36 @@ export function Tabela() {
   };
 	
   const handleSubmit = async () => {
+    const updatedFormData = {
+        smp: formData.smp || '',
+        veiculo: formData.veiculo || '',
+        motorista: formData.motorista || '',
+        telefone: formData.telefone || '',
+        f: formData.f || 'false',
+        ag: formData.ag || 'false',
+        au: formData.au || 'false',
+        entrega: formData.entrega || '',
+        tecn: formData.tecn || '',
+        valor: formData.valor || '',
+        isca: formData.isca || '',
+        datainicio: formData.datainicio || '',
+        datafinal: formData.datafinal || '',
+        destino: formData.destino || '',
+        status: formData.status || '',
+        obs: formData.obs || '',
+        // id: formData.id
+    };
+
     try {
-      const response = await api.post('cadastro', formData);
-      console.log(response.data);
-      onClose(); // Fecha o modal após o envio bem-sucedido
-      fetchData();
-			setFormData({
-				smp: '',
-				veiculo: '',
-				motorista: '',
-				telefone: '',
-				f: false,
-				ag: false,
-				au: false,
-				entrega: '',
-				tecn: '',
-				valor: '',
-				isca: '',
-				datainicio: '',
-				datafinal: '',
-				destino: '',
-				status: '',
-				obs: '',
-			});
-	
-		// Limpar o formulário ou qualquer outra ação necessária após o envio bem-sucedido
+        const response = await api.post('cadastro', updatedFormData);
+        console.log(response.data);
+        onClose(); // Fecha o modal após o envio bem-sucedido
+        fetchData();
     } catch (error) {
-      console.error(error);
+        console.error(error);
     }
-  };
+};
+
 
   const onClickEdit = (request:any) => {
     setFormData(request);
