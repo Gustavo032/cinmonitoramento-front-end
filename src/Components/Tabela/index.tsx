@@ -49,6 +49,8 @@ export function Tabela() {
 				motorista: '',
 				telefone: '',
 				f: false,
+				ag: false,
+				au: false,
 				entrega: '',
 				tecn: '',
 				valor: '',
