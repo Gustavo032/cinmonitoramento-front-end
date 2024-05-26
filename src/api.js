@@ -3,7 +3,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'https://api-g.codematch.com.br:3033/'
+    baseURL: 'https://maplebear.codematch.com.br:3033/'
 })
 
 export default api;
