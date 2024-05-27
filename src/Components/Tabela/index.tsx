@@ -1,5 +1,5 @@
-import { Box, Button, Checkbox, CheckboxGroup, Flex, FormLabel, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, CheckboxGroup, Flex, FormLabel, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import api from '../../api.js';
 
 export function Tabela() {
@@ -7,6 +7,9 @@ export function Tabela() {
   const [editingRowId, setEditingRowId] = useState(null);
   const [formData, setFormData] = useState<any>({});
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure();
+	const cancelRef = useRef();
+	const [deleteId, setDeleteId] = useState(null);
   const [filters, setFilters] = useState({
     smp: '',
     veiculo: '',
@@ -132,12 +135,18 @@ export function Tabela() {
     }
   };
 
-  const delet = async (id:any) => {
+	const confirmDelete = (id: any) => {
+    setDeleteId(id);
+    onAlertOpen();
+  };
+
+  const delet = async () => {
     try {
-      const config = { data: { id } };
+      const config = { data: { id: deleteId } };
       const response = await api.delete('delet', config);
       console.log(response.data);
       fetchData();
+      onAlertClose();
     } catch (error) {
       console.log(error);
     }
@@ -244,7 +253,7 @@ export function Tabela() {
                     ) : (
                       <Button onClick={() => onClickEdit(request)} colorScheme="blue">Editar</Button>
                     )}
-                    <Button onClick={() => delet(request.id_viagem)} colorScheme="red" mt="0.5rem">Deletar</Button>
+                    <Button onClick={() => confirmDelete(request.id_viagem)} colorScheme="red" mt="0.5rem">Deletar</Button>
                   </Td>
                 </Tr>
               ))}
@@ -283,6 +292,30 @@ export function Tabela() {
             </ModalFooter>
           </ModalContent>
         </Modal>
+
+				
+				<AlertDialog isOpen={isAlertOpen} 
+				leastDestructiveRef={(cancelRef as any)}
+				 onClose={onAlertClose}>
+				<AlertDialogOverlay>
+					<AlertDialogContent>
+						<AlertDialogHeader fontSize="lg" fontWeight="bold">
+							Confirmar Exclusão
+						</AlertDialogHeader>
+						<AlertDialogBody>
+							Você tem certeza que deseja deletar essa viagem? Essa ação não pode ser desfeita.
+						</AlertDialogBody>
+						<AlertDialogFooter>
+							<Button ref={(cancelRef as any)} onClick={onAlertClose}>
+								Cancelar
+							</Button>
+							<Button colorScheme="red" onClick={delet} ml={3}>
+								Deletar
+							</Button>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialogOverlay>
+				</AlertDialog>
       </>
     </Box>
   );
